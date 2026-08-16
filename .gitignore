@@ -1,0 +1,55 @@
+# ---- Build output ----
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+project.lock.json
+
+# ---- Publish output ----
+[Pp]ublish/
+publish/
+*.[Pp]ublish.xml
+
+# ---- MSBuild / diagnostics ----
+*.binlog
+msbuild.log
+
+# ---- Test & coverage ----
+[Tt]est[Rr]esults/
+*.trx
+*.coverage
+coverage*.json
+coverage*.xml
+coverage.cobertura.xml
+
+# ---- Visual Studio (reviewer opens in VS on Windows) ----
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ---- Rider / ReSharper (local dev) ----
+.idea/
+riderModule.iml
+*.DotSettings.user
+_ReSharper.Caches/
+/_ReSharper.Caches/
+
+# ---- NuGet ----
+/packages/
+*.nupkg
+# NOTE: keep .config/dotnet-tools.json committed so `dotnet tool restore` works — do not ignore .config/
+
+# ---- Environment / secrets (env-var-driven connection string) ----
+.env
+.env.*
+!.env.example
+*.secrets.json
+
+# ---- OS cruft ----
+.DS_Store
+Thumbs.db
+desktop.ini

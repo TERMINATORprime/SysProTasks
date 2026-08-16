@@ -1,0 +1,7 @@
+﻿services:
+  sysprotask:
+    image: sysprotask
+    build:
+      context: .
+      dockerfile: SysproTask/Dockerfile
+

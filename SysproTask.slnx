@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="SysPro.API/SysPro.API.csproj" />
+    <Project Path="SysPro.Application/SysPro.Application.csproj" />
+    <Project Path="SysPro.CLI\SysPro.CLI.csproj" />
+    <Project Path="SysPro.DB\SysPro.DB.csproj" />
+    <Project Path="SysPro.Domain/SysPro.Domain.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+</Solution>

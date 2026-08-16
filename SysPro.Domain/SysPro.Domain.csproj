@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="CsvHelper">
+        <HintPath>..\..\..\..\.nuget\packages\csvhelper\33.1.0\lib\net9.0\CsvHelper.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>
