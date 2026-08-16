@@ -7,7 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Ingestion\" />
+      <PackageReference Include="CsvHelper" Version="33.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SysPro.DB\SysPro.DB.csproj" />
+      <ProjectReference Include="..\SysPro.Domain\SysPro.Domain.csproj" />
     </ItemGroup>
 
 </Project>

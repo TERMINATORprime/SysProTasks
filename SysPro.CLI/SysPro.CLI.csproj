@@ -6,13 +6,11 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>SysPro.Ingestion</RootNamespace>
+        <UserSecretsId>2e2fe65f-f292-4fea-bf54-cf79e1ae0652</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="CsvHelper" Version="33.1.0" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <ProjectReference Include="..\SysPro.Application\SysPro.Application.csproj" />
       <ProjectReference Include="..\SysPro.Domain\SysPro.Domain.csproj" />
     </ItemGroup>
 

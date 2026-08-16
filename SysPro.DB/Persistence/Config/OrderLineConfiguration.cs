@@ -23,9 +23,6 @@ public class OrderLineConfiguration : IEntityTypeConfiguration<OrderLine>
         builder.Property(ol => ol.Currency)
             .HasMaxLength(3)
             .IsFixedLength();
-
-        builder.Property(ol => ol.UnitPriceCents)
-            .HasPrecision(18, 6);
         
         builder.Property(ol => ol.CreateDate)
             .HasDefaultValueSql("SYSUTCDATETIME()")

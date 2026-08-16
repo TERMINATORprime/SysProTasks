@@ -1,15 +1,28 @@
-﻿using System.Globalization;
-using CsvHelper;
-using CsvHelper.Configuration;
-using SysPro.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using SysPro.Application.Ingestion;
+using SysPro.DB.Persistence;
 
-string folder = "csvData";
-var applicationPath = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-var path = buildPath(applicationPath ,folder);
+var services = new ServiceCollection();
+
+var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__Default")
+                       ?? throw new InvalidOperationException("ConnectionStrings__Default is not set.");
+
+services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+services.AddScoped<CSVIngestion>();
+
+using var provider = services.BuildServiceProvider();
+
+using var scope = provider.CreateScope();
+var ingestion = scope.ServiceProvider.GetRequiredService<CSVIngestion>();
+
+//set to folder path
+var folder = args.Length > 0 ? args[0] : Path.Combine(AppContext.BaseDirectory, "csvData");
+
+var path = buildPath(folder ,folder);
 var csvFiles = Directory.GetFiles(path, "*.csv");
-var orders = new Dictionary<string,List<OrderCSV>>();
-List<ImportAudit> importAudits = [];
-var errors = new List<string>();
 
 static string buildPath(params string[] segments)
 {
@@ -17,60 +30,30 @@ static string buildPath(params string[] segments)
     return Path.GetFullPath(path);
 }
 
-var configCsv = new CsvConfiguration(CultureInfo.InvariantCulture)
+try
 {
-    HasHeaderRecord = true,
-    TrimOptions = TrimOptions.Trim,
-    MissingFieldFound = null,
-    HeaderValidated = null,
-    IgnoreBlankLines =  false,
-};
+    foreach (var csvFile in csvFiles.Reverse())
+    {
+        Console.WriteLine($"Importing {csvFile}:");
+        var csvResult = await ingestion.GetCsvContentFromFile(csvFile);
 
-foreach (var csvFile in csvFiles.Reverse())
+        var audit = csvResult.Item2;
+
+        var result = await ingestion.ProcessCsvContext(csvResult.Item1, audit);
+
+        var insertResult = await ingestion.InsertData(result);
+
+        audit.ProcessedUtc = DateTime.UtcNow;
+        
+        var insertedImportAudit = await ingestion.InsertImportAudit(audit);
+
+        Console.WriteLine($"file {csvFile} has been inserted; Applied: {audit.Applied}, Invalid: {audit.Invalid}");
+    }   
+}
+catch (Exception e)
 {
-    var audit = new ImportAudit()
-    {
-        FileName = Path.GetFileNameWithoutExtension(csvFile),
-        ProcessedUtc = DateTime.UtcNow,
-    };
-    var csvOrders = new List<OrderCSV>();
-    using var reader = new StreamReader(csvFile);
-    using var csv = new CsvReader(reader, configCsv);
-    csv.Read();
-    csv.ReadHeader();
-
-    while (csv.Read())
-    {
-        audit.Considered++;
-        try
-        {
-            csvOrders.Add(csv.GetRecord<OrderCSV>());
-            audit.Applied++;
-        }
-        catch (Exception e)
-        {
-            audit.Invalid++;
-            var message = "";
-            if (csv.Context.Parser != null)
-            {
-                message = $"File: {audit.FileName} Row {csv.Context.Parser.Row}: {e.Message}";
-            }
-            else
-            {
-                message = $"File: {audit.FileName} Row {audit.Considered}: {e.Message}";
-            }
-            errors.Add(message);
-            //Console.WriteLine(message);
-        }
-    }
-    
-    orders.Add(audit.FileName, csvOrders);
-    importAudits.Add(audit);
+    Console.WriteLine(e);
+    throw;
 }
 
-foreach (var audit in importAudits)
-{
-    Console.WriteLine(audit.FileName);
-    Console.WriteLine(audit.Considered);
-    Console.WriteLine(audit.Invalid);
-}
+Console.ReadLine();

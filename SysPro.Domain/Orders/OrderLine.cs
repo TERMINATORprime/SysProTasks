@@ -8,7 +8,7 @@ public class OrderLine
     public int LineNo { get; set; }
     public string? Sku { get; set; }
     public int Quantity { get; set; }
-    public decimal UnitPriceCents { get; set; }
+    public int UnitPriceCents { get; set; }
     public string? Currency { get; set; }
     
     public DateTime CreateDate { get; set; }
