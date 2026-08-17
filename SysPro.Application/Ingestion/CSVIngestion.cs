@@ -2,8 +2,7 @@ using System.Data;
 using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
-using SysPro.Application.Repositories;
-using SysPro.DB.Persistence;
+using SysPro.Application.Interfaces;
 using SysPro.Domain.Entities;
 using SysPro.Domain.Models;
 
@@ -11,13 +10,13 @@ namespace SysPro.Application.Ingestion;
 
 public class CSVIngestion
 {
-    OrdersRepository _repository;
-    AppRepository _appRepository;
-    
-    public CSVIngestion(AppDbContext dbContext)
+    private readonly IOrdersRepository _repository;
+    private readonly IAppRepository _appRepository;
+
+    public CSVIngestion(IOrdersRepository repository, IAppRepository appRepository)
     {
-       _repository = new OrdersRepository(dbContext);
-       _appRepository = new AppRepository(dbContext);
+        _repository = repository;
+        _appRepository = appRepository;
     }
     
     CsvConfiguration _config = null;

@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SysPro.Application.Ingestion;
+using SysPro.Application.Interfaces;
+using SysPro.Application.Repositories;
 using SysPro.DB.Persistence;
 
 var services = new ServiceCollection();
@@ -11,6 +13,8 @@ var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__De
 services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
+services.AddScoped<IOrdersRepository, OrdersRepository>();
+services.AddScoped<IAppRepository, AppRepository>();
 services.AddScoped<CSVIngestion>();
 
 using var provider = services.BuildServiceProvider();
@@ -22,7 +26,7 @@ var ingestion = scope.ServiceProvider.GetRequiredService<CSVIngestion>();
 var folder = args.Length > 0 ? args[0] : Path.Combine(AppContext.BaseDirectory, "csvData");
 
 var path = buildPath(folder ,folder);
-var csvFiles = Directory.GetFiles(path, "*.csv");
+var csvFiles = CsvFileDiscovery.GetCsvFiles(path);
 
 static string buildPath(params string[] segments)
 {
@@ -32,7 +36,7 @@ static string buildPath(params string[] segments)
 
 try
 {
-    foreach (var csvFile in csvFiles.Reverse())
+    foreach (var csvFile in csvFiles)
     {
         Console.WriteLine($"Importing {csvFile}:");
         var csvResult = await ingestion.GetCsvContentFromFile(csvFile);

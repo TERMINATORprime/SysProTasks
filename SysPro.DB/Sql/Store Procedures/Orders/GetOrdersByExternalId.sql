@@ -10,7 +10,7 @@ BEGIN
         o.OrderDate,
         o.CreatedDate as [OrderCreatedDate],
         o.ModifiedDate as [OrderModifiedDate],
-        ol.OrderID as [OrderLineId],
+        ol.OrderLineId as [OrderLineId],
         ol.CustomerCode,
         ol.[LineNo],
         ol.Sku,

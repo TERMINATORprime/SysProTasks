@@ -1,0 +1,4 @@
+order_external_id,customer_code,order_date,line_no,sku,qty,unit_price_cents,currency
+__EXT__,CUST-99,2024-08-01,1,SKU-AAA,25,15000,ZAR
+__EXT__,CUST-99,2024-08-01,2,SKU-BBB,5,32000,ZAR
+__EXT__,CUST-99,2024-08-01,3,SKU-CCC,2,99999,ZAR
