@@ -11,6 +11,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SysPro.Application\SysPro.Application.csproj" />
+      <ProjectReference Include="..\SysPro.DB\SysPro.DB.csproj" />
       <ProjectReference Include="..\SysPro.Domain\SysPro.Domain.csproj" />
     </ItemGroup>
 

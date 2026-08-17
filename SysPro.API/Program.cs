@@ -1,23 +1,19 @@
-using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using SysPro.API.Interfaces;
 using SysPro.API.Services;
-using SysPro.Application.Interfaces;
-using SysPro.Application.Repositories;
-using SysPro.DB.Persistence;
+using SysPro.DB;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-var conn = builder.Configuration.GetConnectionString("Default");
+var conn = builder.Configuration.GetConnectionString("Default")
+           ?? throw new InvalidOperationException("ConnectionStrings:Default is not set.");
 
-builder.Services.AddDbContext<AppDbContext>(options => 
-    options.UseSqlServer(conn));
+builder.Services.AddInfrastructure(conn, builder.Environment.IsDevelopment());
 
 builder.Services.AddScoped<IOrdersService, OrderServices>();
-builder.Services.AddScoped<IOrdersRepository, OrdersRepository>();
 
 var app = builder.Build();
 

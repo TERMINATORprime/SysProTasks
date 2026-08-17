@@ -1,5 +1,5 @@
 using SysPro.Application.Interfaces;
-using SysPro.Application.Repositories;
+using SysPro.DB.Repositories;
 using SysPro.Domain.Models;
 
 namespace SysPro.Tests.Fakes;

@@ -1,20 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using SysPro.Application.Ingestion;
-using SysPro.Application.Interfaces;
-using SysPro.Application.Repositories;
-using SysPro.DB.Persistence;
+using SysPro.DB;
 
 var services = new ServiceCollection();
 
 var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__Default")
                        ?? throw new InvalidOperationException("ConnectionStrings__Default is not set.");
 
-services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
-
-services.AddScoped<IOrdersRepository, OrdersRepository>();
-services.AddScoped<IAppRepository, AppRepository>();
+services.AddInfrastructure(connectionString);
 services.AddScoped<CSVIngestion>();
 
 using var provider = services.BuildServiceProvider();

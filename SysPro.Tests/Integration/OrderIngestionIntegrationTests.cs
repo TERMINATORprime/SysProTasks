@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SysPro.Application.Ingestion;
-using SysPro.Application.Repositories;
 using SysPro.DB.Persistence;
+using SysPro.DB.Repositories;
 using SysPro.Domain.Models;
 using Testcontainers.MsSql;
 

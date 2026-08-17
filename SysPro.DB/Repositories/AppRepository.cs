@@ -5,7 +5,7 @@ using SysPro.Application.Interfaces;
 using SysPro.DB.Persistence;
 using SysPro.Domain.Models;
 
-namespace SysPro.Application.Repositories;
+namespace SysPro.DB.Repositories;
 
 public class AppRepository : IAppRepository
 {
