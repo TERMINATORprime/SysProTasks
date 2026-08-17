@@ -1,9 +1,11 @@
 CREATE OR ALTER PROCEDURE Orders.GetOrderByOrderDateRange
-    @StartDate datetime,
-    @EndDate datetime = GETUTCDATE
+    @StartDate datetime2,
+    @EndDate   datetime2 = NULL
     AS
 BEGIN
     SET NOCOUNT ON;
+
+    SET @EndDate = ISNULL(@EndDate, SYSUTCDATETIME());
 
 Select
     o.OrderId,

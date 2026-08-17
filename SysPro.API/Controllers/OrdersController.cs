@@ -26,17 +26,21 @@ public class OrdersController : ControllerBase
     public async Task<ActionResult<OrdersViewModel>> GetOrdersByExternalId([FromBody] string[] externalId) 
         => Ok(await _ordersService.GetOrdersByExternalIdAsync(externalId));
 
-    [HttpGet("by-date-range/{startDate:datetime}&{endDate:datetime}")] 
-    public async Task<ActionResult<List<OrdersViewModel>>> GetOrderByOrderDateRange([FromQuery] DateTime startDate,
-        [FromQuery] DateTime endDate)
-    => Ok(await _ordersService.GetOrderByOrderDateRangeAsync(startDate, endDate));
+    [HttpGet("by-date-range")] 
+    public async Task<ActionResult<List<OrdersViewModel>>> GetOrderByOrderDateRange(DateTime startDate,
+        DateTime? endDate)
+    => Ok(await _ordersService.GetOrderByOrderDateRangeAsync(
+        startDate,
+        endDate   ?? DateTime.UtcNow));
 
     [HttpPost]
     public async Task<ActionResult<List<Tuple<string, string>>>> InsertOrUpdateOrders([FromBody] List<OrderPayload> orders)
         => Ok(await _ordersService.InsertOrUpdateOrders(orders));
 
-    [HttpGet("summary/{startDate:datetime}&{endDate:datetime}")]
-    public async Task<ActionResult<List<SummaryViewModel>>> GetSummary([FromQuery] DateTime startDate,
-        [FromQuery] DateTime endDate)
-    => Ok(await _ordersService.GetOrderSummariesAsync(startDate, endDate));
+    [HttpGet("summary")]
+    public async Task<ActionResult<List<SummaryViewModel>>> GetSummary(DateTime startDate,
+        DateTime? endDate)
+    => Ok(await _ordersService.GetOrderSummariesAsync(
+        startDate,
+        endDate   ?? DateTime.UtcNow));
 }
