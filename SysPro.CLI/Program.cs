@@ -44,7 +44,7 @@ try
         
         var insertedImportAudit = await ingestion.InsertImportAudit(audit);
 
-        Console.WriteLine($"file {csvFile} has been inserted; Applied: {audit.Applied}, Invalid: {audit.Invalid}");
+        Console.WriteLine($"file {csvFile} has been inserted; Considered: {audit.Considered} Applied: {audit.Applied}, Invalid: {audit.Invalid}");
     }   
 }
 catch (Exception e)

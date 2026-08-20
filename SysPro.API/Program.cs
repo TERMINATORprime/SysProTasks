@@ -5,6 +5,21 @@ using SysPro.DB;
 
 var builder = WebApplication.CreateBuilder(args);
 
+#if DEBUG
+if (builder.Environment.IsDevelopment())
+{
+    var machineName = Environment.MachineName;
+    if (!System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform
+            .Windows))
+    {
+        machineName = machineName.ToLowerInvariant();
+    }
+    
+    var machineOverrideFile = Path.Combine("dev", $"appsettings.{machineName}.json");
+    builder.Configuration.AddJsonFile(machineOverrideFile, optional: true, reloadOnChange: true);
+}
+#endif
+
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
